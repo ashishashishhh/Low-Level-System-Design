@@ -117,239 +117,291 @@ Here are the main classes of our Hotel Management System:
 
 Here is the high-level definition for the classes described above.
 
-**Enums, data types, and constants:** Here are the required enums, data types, and constants:
-
-```python
-from enum import Enum
-
-
-class RoomStyle(Enum):
-    STANDARD, DELUXE, FAMILY_SUITE, BUSINESS_SUITE = 1, 2, 3, 4
-
-
-class RoomStatus(Enum):
-    AVAILABLE, RESERVED, OCCUPIED, NOT_AVAILABLE, BEING_SERVICED, OTHER = 1, 2, 3, 4, 5, 6
-
-
-class BookingStatus(Enum):
-    REQUESTED, PENDING, CONFIRMED, CHECKED_IN, CHECKED_OUT, CANCELLED, ABANDONED = 1, 2, 3, 4, 5, 6, 7
-
-
-class AccountStatus(Enum):
-    ACTIVE, CLOSED, CANCELED, BLACKLISTED, BLOCKED = 1, 2, 3, 4, 5
-
-
-class AccountType(Enum):
-    MEMBER, GUEST, MANAGER, RECEPTIONIST = 1, 2, 3, 4
-
-
-class PaymentStatus(Enum):
-    UNPAID, PENDING, COMPLETED, FILLED, DECLINED, CANCELLED, ABANDONED, SETTLING, SETTLED, REFUNDED = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-
-
-class Address:
-    def __init__(self, street, city, state, zip_code, country):
-        self.__street_address = street
-        self.__city = city
-        self.__state = state
-        self.__zip_code = zip_code
-        self.__country = country
-
-
-```
-
-**Account, Person, Guest, Receptionist, and Server:** These classes represent the different people that interact with our system:
-
-```python
-from abc import ABC
-from .constants import *
-
-
-# For simplicity, we are not defining getter and setter functions. The reader can
-# assume that all class attributes are private and accessed through their respective
-# public getter methods and modified only through their public methods function.
-
-class Account:
-    def __init__(self, id, password, status=AccountStatus.Active):
-        self.__id = id
-        self.__password = password
-        self.__status = status
-
-    def reset_password(self):
-        None
-
-
-# from abc import ABC, abstractmethod
-class Person(ABC):
-    def __init__(self, name, address, email, phone, account):
-        self.__name = name
-        self.__address = address
-        self.__email = email
-        self.__phone = phone
-        self.__account = account
-
-
-class Guest(Person):
-    def __init__(self):
-        self.__total_rooms_checked_in = 0
-
-    def get_bookings(self):
-        None
-
-
-class Receptionist(Person):
-    def search_member(self, name):
-        None
-
-    def create_booking(self):
-        None
-
-
-class Server(Person):
-    def add_room_charge(self, room, room_charge):
-        None
-
-```
-
-**Hotel and HotelLocation:** These classes represent the top-level classes of the system:
-
-```python
-class HotelLocation:
-    def __init__(self, name, address):
-        self.__name = name
-        self.__location = address
-
-    def get_rooms(self):
-        None
-
-
-class Hotel:
-    def __init__(self, name):
-        self.__name = name
-        self.__locations = []
-
-    def add_location(self, location):
-        None
-
-```
-
-**Room, RoomKey, and RoomHouseKeeping:** To encapsulate a room, room key, and housekeeping:
-
-```python
-from datetime import datetime
-from abc import ABC
-
-
-class Search(ABC):
-    def search(self, style, start_date, duration):
-        None
-
-
-class Room(Search):
-    def __init__(self, room_number, room_style, status, price, is_smoking):
-        self.__room_number = room_number
-        self.__style = room_style
-        self.__status = status
-        self.__booking_price = price
-        self.__is_smoking = is_smoking
-
-        self.__keys = []
-        self.__house_keeping_log = []
-
-    def is_room_available(self):
-        None
-
-    def check_in(self):
-        None
-
-    def check_out(self):
-        None
-
-    def search(self, style, start_date, duration):
-        None
-
-
-# return all rooms with the given style and availability
-
-
-class RoomKey:
-    def __init__(self, key_id, barcode, is_active, is_master):
-        self.__key_id = key_id
-        self.__barcode = barcode
-        self.__issued_at = datetime.date.today()
-        self.__active = is_active
-        self.__is_master = is_master
-
-    def assign_room(self, room):
-        None
-
-    def is_active(self):
-        None
-
-
-class RoomHouseKeeping:
-    def __init__(self, description, duration, house_keeper):
-        self.__description = description
-        self.__start_datetime = datetime.date.today()
-        self.__duration = duration
-        self.__house_keeper = house_keeper
-
-    def add_house_keeping(self, room):
-        None
-
-```
-
-**RoomBooking and RoomCharge:** To encapsulate a booking and different charges against a booking:
-
-```python
-from datetime import datetime
-from abc import ABC
-
-
-class RoomBooking:
-    def __init__(self, reservation_number, start_date, duration_in_days, booking_status):
-        self.__reservation_number = reservation_number
-        self.__start_date = start_date
-        self.__duration_in_days = duration_in_days
-        self.__status = booking_status
-        self.__checkin = None
-        self.__checkout = None
-
-        self.__guest_id = 0
-        self.__room = None
-        self.__invoice = None
-        self.__notifications = []
-
-    def fetch_details(self, reservation_number):
-        None
-
-
-# from abc import ABC, abstractmethod
-class RoomCharge(ABC):
-    def __init__(self):
-        self.__issue_at = datetime.date.today()
-
-    def add_invoice_item(self, invoice):
-        None
-
-
-class Amenity(RoomCharge):
-    def __init__(self, name, description):
-        self.__name = name
-        self.__description = description
-
-
-class RoomService(RoomCharge):
-    def __init__(self, is_chargeable, request_time):
-        self.__is_chargeable = is_chargeable
-        self.__request_time = request_time
-
-
-class KitchenService(RoomCharge):
-    def __init__(self, description):
-        self.__description = description
-
-```
-
-
+public enum RoomStyle {
+  STANDARD, DELUXE, FAMILY_SUITE, BUSINESS_SUITE
+}
+
+public enum RoomStatus {
+  AVAILABLE, RESERVED, OCCUPIED, NOT_AVAILABLE, BEING_SERVICED, OTHER
+}
+
+public enum BookingStatus {
+  REQUESTED, PENDING, CONFIRMED, CHECKED_IN, CHECKED_OUT, CANCELLED, ABANDONED
+}
+
+public enum AccountStatus {
+  ACTIVE, CLOSED, CANCELED, BLACKLISTED, BLOCKED
+}
+
+public enum AccountType {
+  MEMBER, GUEST, MANAGER, RECEPTIONIST
+}
+
+public enum PaymentStatus {
+  UNPAID, PENDING, COMPLETED, FILLED, DECLINED, CANCELLED, ABANDONED, SETTLING, SETTLED, REFUNDED
+}
+
+// Observer Pattern for notifications
+interface Observer {
+    void update(String message);
+}
+
+class Guest implements Observer {
+    private String name;
+    private int totalRoomsCheckedIn;
+
+    public List<RoomBooking> getBookings() {
+        // return booking details
+    }
+
+    @Override
+    public void update(String message) {
+        System.out.println("Notification for Guest: " + name + ": " + message);
+    }
+}
+
+class SystemNotifier {
+    private List<Observer> observers = new ArrayList<>();
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+}
+
+// Factory Method Pattern for creating rooms and room services
+abstract class RoomFactory {
+    public abstract Room createRoom(RoomStyle style, String roomNumber, double price, boolean isSmoking);
+}
+
+class DeluxeRoomFactory extends RoomFactory {
+    @Override
+    public Room createRoom(RoomStyle style, String roomNumber, double price, boolean isSmoking) {
+        return new Room(roomNumber, style, price, isSmoking);
+    }
+}
+
+class FamilySuiteRoomFactory extends RoomFactory {
+    @Override
+    public Room createRoom(RoomStyle style, String roomNumber, double price, boolean isSmoking) {
+        return new Room(roomNumber, style, price, isSmoking);
+    }
+}
+
+// Strategy Pattern for searching rooms
+interface SearchStrategy {
+    List<Room> searchRooms(List<Room> rooms, RoomStyle style, Date startDate, int duration);
+}
+
+class RoomStyleSearchStrategy implements SearchStrategy {
+    @Override
+    public List<Room> searchRooms(List<Room> rooms, RoomStyle style, Date startDate, int duration) {
+        List<Room> result = new ArrayList<>();
+        for (Room room : rooms) {
+            if (room.getStyle() == style && room.isRoomAvailable()) {
+                result.add(room);
+            }
+        }
+        return result;
+    }
+}
+
+class RoomAvailabilitySearchStrategy implements SearchStrategy {
+    @Override
+    public List<Room> searchRooms(List<Room> rooms, RoomStyle style, Date startDate, int duration) {
+        List<Room> result = new ArrayList<>();
+        for (Room room : rooms) {
+            if (room.isRoomAvailable() && room.getStyle() == style) {
+                result.add(room);
+            }
+        }
+        return result;
+    }
+}
+
+// Command Pattern for handling room bookings and services
+interface Command {
+    void execute();
+}
+
+class BookRoomCommand implements Command {
+    private RoomBooking booking;
+
+    public BookRoomCommand(RoomBooking booking) {
+        this.booking = booking;
+    }
+
+    @Override
+    public void execute() {
+        System.out.println("Booking room for reservation: " + booking.getReservationNumber());
+        booking.setStatus(BookingStatus.CONFIRMED);
+    }
+}
+
+class CancelBookingCommand implements Command {
+    private RoomBooking booking;
+
+    public CancelBookingCommand(RoomBooking booking) {
+        this.booking = booking;
+    }
+
+    @Override
+    public void execute() {
+        System.out.println("Cancelling booking for reservation: " + booking.getReservationNumber());
+        booking.setStatus(BookingStatus.CANCELLED);
+    }
+}
+
+// Template Method Pattern for Housekeeping and Room Service
+abstract class RoomServiceTemplate {
+    public final void executeService(Room room) {
+        checkServiceAvailability();
+        performService(room);
+        addServiceCharge(room);
+    }
+
+    protected abstract void checkServiceAvailability();
+    protected abstract void performService(Room room);
+    protected abstract void addServiceCharge(Room room);
+}
+
+class HousekeepingService extends RoomServiceTemplate {
+    @Override
+    protected void checkServiceAvailability() {
+        System.out.println("Checking availability for housekeeping service.");
+    }
+
+    @Override
+    protected void performService(Room room) {
+        System.out.println("Performing housekeeping for room: " + room.getRoomNumber());
+    }
+
+    @Override
+    protected void addServiceCharge(Room room) {
+        System.out.println("Adding housekeeping charge to room: " + room.getRoomNumber());
+    }
+}
+
+class FoodService extends RoomServiceTemplate {
+    @Override
+    protected void checkServiceAvailability() {
+        System.out.println("Checking availability for food service.");
+    }
+
+    @Override
+    protected void performService(Room room) {
+        System.out.println("Serving food to room: " + room.getRoomNumber());
+    }
+
+    @Override
+    protected void addServiceCharge(Room room) {
+        System.out.println("Adding food service charge to room: " + room.getRoomNumber());
+    }
+}
+
+// Supporting Classes
+public class Room {
+    private String roomNumber;
+    private RoomStyle style;
+    private RoomStatus status;
+    private double bookingPrice;
+    private boolean isSmoking;
+
+    public Room(String roomNumber, RoomStyle style, double bookingPrice, boolean isSmoking) {
+        this.roomNumber = roomNumber;
+        this.style = style;
+        this.bookingPrice = bookingPrice;
+        this.isSmoking = isSmoking;
+        this.status = RoomStatus.AVAILABLE;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public RoomStyle getStyle() {
+        return style;
+    }
+
+    public RoomStatus getStatus() {
+        return status;
+    }
+
+    public boolean isRoomAvailable() {
+        return status == RoomStatus.AVAILABLE;
+    }
+
+    public void checkIn() {
+        status = RoomStatus.OCCUPIED;
+    }
+
+    public void checkOut() {
+        status = RoomStatus.AVAILABLE;
+    }
+}
+
+public class RoomBooking {
+    private String reservationNumber;
+    private Date startDate;
+    private int durationInDays;
+    private BookingStatus status;
+    private Date checkin;
+    private Date checkout;
+    private Room room;
+
+    public RoomBooking(String reservationNumber, Room room, Date startDate, int durationInDays) {
+        this.reservationNumber = reservationNumber;
+        this.room = room;
+        this.startDate = startDate;
+        this.durationInDays = durationInDays;
+        this.status = BookingStatus.PENDING;
+    }
+
+    public String getReservationNumber() {
+        return reservationNumber;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
+    }
+}
+
+// Main class for testing
+public class Main {
+    public static void main(String[] args) {
+        // Create rooms using Factory Pattern
+        RoomFactory deluxeFactory = new DeluxeRoomFactory();
+        Room room1 = deluxeFactory.createRoom(RoomStyle.DELUXE, "101", 200.0, false);
+
+        // Create room booking
+        RoomBooking booking1 = new RoomBooking("R123", room1, new Date(), 3);
+
+        // Create commands for booking and canceling
+        Command bookRoom = new BookRoomCommand(booking1);
+        Command cancelBooking = new CancelBookingCommand(booking1);
+
+        // Execute commands
+        bookRoom.execute();
+        cancelBooking.execute();
+
+        // Execute room service using Template Method Pattern
+        RoomServiceTemplate housekeeping = new HousekeepingService();
+        housekeeping.executeService(room1);
+
+        // System notification (Observer Pattern)
+        SystemNotifier notifier = new SystemNotifier();
+        Guest guest = new Guest(); // Observer
+        notifier.addObserver(guest);
+        notifier.notifyObservers("Your room booking is confirmed.");
+    }
+}
 

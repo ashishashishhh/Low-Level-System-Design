@@ -112,255 +112,184 @@ Here are the main classes of our Car Rental System:
 
 Here is the high-level definition for the classes described above.
 
-**Enums, data types and constants:** Here are the required enums, data types, and constants:
 
-```python
-from enum import Enum
-
-
-class BillItemType(Enum):
-    BASE_CHARGE, ADDITIONAL_SERVICE, FINE, OTHER = 1, 2, 3, 4
-
-
-class VehicleLogType(Enum):
-    ACCIDENT, FUELING, CLEANING_SERVICE, OIL_CHANGE, REPAIR, OTHER = 1, 2, 3, 4, 5, 6
-
-
-class VanType(Enum):
-    PASSENGER, CARGO = 1, 2
-
-
-class CarType(Enum):
-    ECONOMY, COMPACT, INTERMEDIATE, STANDARD, FULL_SIZE, PREMIUM, LUXURY = 1, 2, 3, 4, 5, 6, 7
-
-
-class VehicleStatus(Enum):
-    AVAILABLE, RESERVED, LOANED, LOST, BEING_SERVICED, OTHER = 1, 2, 3, 4, 5, 6
-
-
-class ReservationStatus(Enum):
-    ACTIVE, PENDING, CONFIRMED, COMPLETED, CANCELLED, NONE = 1, 2, 3, 4, 5, 6
-
-
-class AccountStatus(Enum):
-    ACTIVE, CLOSED, CANCELED, BLACKLISTED, BLOCKED = 1, 2, 3, 4, 5
-
-
-class PaymentStatus(Enum):
-    UNPAID, PENDING, COMPLETED, FILLED, DECLINED, CANCELLED, ABANDONED, SETTLING, SETTLED, REFUNDED = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-
-
-class Address:
-    def __init__(self, street, city, state, zip_code, country):
-        self.__street_address = street
-        self.__city = city
-        self.__state = state
-        self.__zip_code = zip_code
-        self.__country = country
-
-
-class Person():
-    def __init__(self, name, address, email, phone):
-        self.__name = name
-        self.__address = address
-        self.__email = email
-        self.__phone = phone
-
-```
-
-**Account, Member, Receptionist, and Additional Driver:** These classes represent different people that interact with our system:
-
-```python
-from abc import ABC
-from .constants import AccountStatus
-
-
-# For simplicity, we are not defining getter and setter functions. The reader can
-# assume that all class attributes are private and accessed through their respective
-# public getter methods and modified only through their public methods function.
-
-
-class Account(ABC):
-    def __init__(self, id, password, person, status=AccountStatus.NONE):
-        self.__id = id
-        self.__password = password
-        self.__status = AccountStatus.NONE
-        self.__person = person
-
-    def reset_password(self):
-        None
-
-
-class Member(Account):
-    def __init__(self):
-        self.__total_vehicles_reserved = 0
-
-    def get_reservations(self):
-        None
-
-
-class Receptionist(Account):
-    def __init__(self, date_joined):
-        self.__date_joined = date_joined
-
-    def search_member(self, name):
-        None
-
-
-class AdditionalDriver:
-    def __init__(self, id, person):
-        self.__driver_id = id
-        self.__person = person
-
-```
-
-**CarRentalSystem and CarRentalLocation:** These classes represent the top level classes:
-
-```python
-class CarRentalLocation:
-    def __init__(self, name, address):
-        self.__name = name
-        self.__location = address
-
-    def get_location(self):
-        return self.__location
-
-
-class CarRentalSystem:
-    def __init__(self, name):
-        self.__name = name
-        self.__locations = []
-
-    def add_new_location(self, location):
-        None
-
-```
-
-**Vehicle, VehicleLog, and VehicleReservation:** To encapsulate a vehicle, log, and reservation. The VehicleReservation class will be responsible for processing the reservation and return of a vehicle:
-
-```python
-from abc import ABC
-from datetime import datetime
-from .constants import ReservationStatus
-
-
-class Vehicle(ABC):
-    def __init__(self, license_num, stock_num, capacity, barcode, has_sunroof, status, model, make, manufacturing_year,
-                 mileage):
-        self.__license_number = license_num
-        self.__stock_number = stock_num
-        self.__passenger_capacity = capacity
-        self.__barcode = barcode
-        self.__has_sunroof = has_sunroof
-        self.__status = status
-        self.__model = model
-        self.__make = make
-        self.__manufacturing_year = manufacturing_year
-        self.__mileage = mileage
-        self.__log = []
-
-    def reserve_vehicle(self):
-        None
-
-    def return_vehicle(self):
-        None
-
-
-class Car(Vehicle):
-    def __init__(self, license_num, stock_num, capacity, barcode, has_sunroof, status, model, make, manufacturing_year,
-                 mileage, type):
-        super().__init__(license_num, stock_num, capacity, barcode,
-                         has_sunroof, status, model, make, manufacturing_year, mileage)
-        self.__type = type
-
-
-class Van(Vehicle):
-    def __init__(self, license_num, stock_num, capacity, barcode, has_sunroof, status, model, make, manufacturing_year,
-                 mileage, type):
-        super().__init__(license_num, stock_num, capacity, barcode,
-                         has_sunroof, status, model, make, manufacturing_year, mileage)
-        self.__type = type
-
-
-class Truck(Vehicle):
-    def __init__(self, license_num, stock_num, capacity, barcode, has_sunroof, status, model, make, manufacturing_year,
-                 mileage, type):
-        super().__init__(license_num, stock_num, capacity, barcode,
-                         has_sunroof, status, model, make, manufacturing_year, mileage)
-        self.__type = type
-
-
-# We can have similar definition for other vehicle types
-
-# ...
-
-class VehicleLog:
-    def __init__(self, id, type, description, creation_date):
-        self.__id = id
-        self.__type = type
-        self.__description = description
-        self.__creation_date = creation_date
-
-    def update(self):
-        None
-
-    def search_by_log_type(self, type):
-        None
-
-
-class VehicleReservation:
-    def __init__(self, reservation_number):
-        self.__reservation_number = reservation_number
-        self.__creation_date = datetime.date.today()
-        self.__status = ReservationStatus.ACTIVE
-        self.__due_date = datetime.date.today()
-        self.__return_date = datetime.date.today()
-        self.__pickup_location_name = ""
-        self.__return_location_name = ""
-
-        self.__customer_id = 0
-        self.__vehicle = None
-        self.__bill = None
-        self.__additional_drivers = []
-        self.__notifications = []
-        self.__insurances = []
-        self.__equipments = []
-        self.__services = []
-
-    def fetch_reservation_details(self, reservation_number):
-        None
-
-    def get_additional_drivers(self):
-        return self.__additional_drivers
-
-```
-
-**VehicleInventory and Search:** VehicleInventory will implement an interface ‘Search’ to facilitate the searching of vehicles:
-
-```python
-from abc import ABC
-
-
-class Search(ABC):
-    def search_by_type(self, type):
-        None
-
-    def search_by_model(self, model):
-        None
-
-
-class VehicleInventory(Search):
-    def __init__(self):
-        self.__vehicle_types = {}
-        self.__vehicle_models = {}
-
-    def search_by_type(self, query):
-        # return all vehicles of the given type.
-        return self.__vehicle_types.get(query)
-
-    def search_by_model(self, query):
-        # return all vehicles of the given model.
-        return self.__vehicle_models.get(query)
-
-```
-
+import java.util.*;
+
+enum VehicleType {
+    CAR, TRUCK, SUV, VAN, MOTORCYCLE
+}
+
+enum Equipment {
+    NAVIGATION, CHILD_SEAT, SKI_RACK
+}
+
+enum Service {
+    ROADSIDE_ASSISTANCE, ADDITIONAL_DRIVER, WIFI
+}
+
+class Vehicle {
+    private VehicleType type;
+    private int barcode;
+    private int parkingSlot;
+    private Date rentDate;
+    private Date dueDate;
+
+    public Vehicle(VehicleType type) {
+        this.type = type;
+        this.barcode = new Random().nextInt(90000) + 10000;
+        this.parkingSlot = new Random().nextInt(900) + 100;
+        this.rentDate = null;
+        this.dueDate = null;
+    }
+
+    public void clearBooking() {
+        this.rentDate = null;
+        this.dueDate = null;
+    }
+
+    // Getters and setters
+    public VehicleType getType() {
+        return type;
+    }
+
+    public int getBarcode() {
+        return barcode;
+    }
+
+    public Date getRentDate() {
+        return rentDate;
+    }
+
+    public void setRentDate(Date rentDate) {
+        this.rentDate = rentDate;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+}
+
+class Member {
+    private String name;
+    private String id;
+    private boolean isInsured;
+    private List<Equipment> equipments;
+    private List<Service> services;
+    private Vehicle rentedVehicle;
+    private Vehicle bookedVehicle;
+
+    public Member(String name, String id) {
+        this.name = name;
+        this.id = id;
+        this.isInsured = false;
+        this.equipments = new ArrayList<>();
+        this.services = new ArrayList<>();
+        this.rentedVehicle = null;
+        this.bookedVehicle = null;
+    }
+
+    // Getters and setters
+    public Vehicle getRentedVehicle() {
+        return rentedVehicle;
+    }
+
+    public void setRentedVehicle(Vehicle rentedVehicle) {
+        this.rentedVehicle = rentedVehicle;
+    }
+
+    public Vehicle getBookedVehicle() {
+        return bookedVehicle;
+    }
+
+    public void setBookedVehicle(Vehicle bookedVehicle) {
+        this.bookedVehicle = bookedVehicle;
+    }
+}
+
+class RentingSystem {
+    private Map<String, Member> members;
+    private List<Vehicle> availableVehicles;
+    private Map<Integer, Vehicle> bookedVehicles;
+    private Map<Integer, Vehicle> rentedVehicles;
+
+    public RentingSystem() {
+        this.members = new HashMap<>();
+        this.availableVehicles = new ArrayList<>();
+        this.bookedVehicles = new HashMap<>();
+        this.rentedVehicles = new HashMap<>();
+    }
+
+    public void registerMember(String name, String id) {
+        Member member = new Member(name, id);
+        members.put(id, member);
+    }
+
+    public void addVehicle(VehicleType type) {
+        Vehicle vehicle = new Vehicle(type);
+        availableVehicles.add(vehicle);
+    }
+
+    public List<Vehicle> searchVehicle(VehicleType type) {
+        List<Vehicle> results = new ArrayList<>();
+        for (Vehicle vehicle : availableVehicles) {
+            if (vehicle.getType() == type) {
+                results.add(vehicle);
+            }
+        }
+        return results;
+    }
+
+    public String reserveVehicle(Vehicle vehicle, Date bookingDate) {
+        if (!availableVehicles.remove(vehicle)) {
+            return "Vehicle not available";
+        }
+        bookedVehicles.put(vehicle.getBarcode(), vehicle);
+        vehicle.setRentDate(bookingDate);
+        return "Booked successfully";
+    }
+
+    public String rentVehicle(Vehicle vehicle, int days) {
+        if (!bookedVehicles.containsKey(vehicle.getBarcode())) {
+            return "Vehicle not booked";
+        }
+        bookedVehicles.remove(vehicle.getBarcode());
+        rentedVehicles.put(vehicle.getBarcode(), vehicle);
+        vehicle.setRentDate(new Date());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(vehicle.getRentDate());
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+        vehicle.setDueDate(calendar.getTime());
+        return "Rented successfully";
+    }
+
+    public String returnVehicle(Member member) {
+        Vehicle vehicle = member.getRentedVehicle();
+        if (vehicle == null) {
+            return "No vehicle rented";
+        }
+        if (new Date().after(vehicle.getDueDate())) {
+            return "Late fee applicable";
+        }
+        rentedVehicles.remove(vehicle.getBarcode());
+        vehicle.clearBooking();
+        availableVehicles.add(vehicle);
+        return "Vehicle returned successfully";
+    }
+
+    public String cancelReservation(Member member) {
+        Vehicle vehicle = member.getBookedVehicle();
+        if (vehicle == null) {
+            return "Vehicle not booked";
+        }
+        if (!bookedVehicles.containsKey(vehicle.getBarcode())) {
+            return "Cannot find booking";
+        }
+        bookedVehicles.remove(vehicle.getBarcode());
+        availableVehicles.add(vehicle);
+        return "Reservation canceled successfully";
+    }
+}

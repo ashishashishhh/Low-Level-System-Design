@@ -99,230 +99,339 @@ Here are the main classes of the Cricinfo system:
 
 Here is the high-level definition for the classes described above.
 
-**Enums, data types, and constants:** Here are the required enums, data types, and constants:
-
-```python
-from enum import Enum
-
-
-class Address:
-    def __init__(self, street, city, state, zip_code, country):
-        self.__street_address = street
-        self.__city = city
-        self.__state = state
-        self.__zip_code = zip_code
-        self.__country = country
-
-
-class Person():
-    def __init__(self, name, address, email, phone):
-        self.__name = name
-        self.__address = address
-        self.__email = email
-        self.__phone = phone
-
-
-class MatchFormat(Enum):
-    ODI, T20, TEST = 1, 2, 3
-
-
-class MatchResult(Enum):
-    LIVE, FINISHED, DRAWN, CANCELLED = 1, 2, 3, 4
-
-
-class UmpireType(Enum):
-    FIELD, RESERVED, TV = 1, 2, 3
-
-
-class WicketType(Enum):
-    BOLD, CAUGHT, STUMPED, RUN_OUT, LBW, RETIRED_HURT, HIT_WICKET, OBSTRUCTING = 1, 2, 3, 4, 5, 6, 7, 8
-
-
-class BallType(Enum):
-    NORMAL, WIDE, WICKET, NO_BALL = 1, 2, 3, 4
-
-
-class RunType(Enum):
-    NORMAL, FOUR, SIX, LEG_BYE, BYE, NO_BALL, OVERTHROW = 1, 2, 3, 4, 5, 6, 7
-
-```
-
-**Admin, Player, Umpire, Referee, and Commentator:** These classes represent the different people that interact with our system:
-
-```python
-# For simplicity, we are not defining getter and setter functions. The reader can
-# assume that all class attributes are private and accessed through their respective
-# public getter methods and modified only through their public methods function.
-
-class Player:
-    def __init__(self, person):
-        self.__person = person
-        self.__contracts = []
-
-    def add_contract(self, contract):
-        None
-
-
-class Admin:
-    def __init__(self, person):
-        self.__person = person
-
-    def add_match(self, match):
-        None
-
-    def add_team(self, team):
-        None
-
-    def add_tournament(self, tournament):
-        None
-
-
-class Umpire:
-    def __init__(self, person):
-        self.__person = person
-
-    def assign_match(self, match):
-        None
-
-
-class Referee:
-    def __init__(self, person):
-        self.__person = person
-
-    def assign_match(self, match):
-        None
-
-
-class Commentator:
-    def __init__(self, person):
-        self.__person = person
-
-    def assign_match(self, match):
-        None
-
-```
-
-**Team, TournamentSquad, and Playing11:** Team will announce a squad for a tournament, out of which, the playing 11 will be chosen:
-
-```python
-class Team:
-    def __init__(self, name, coach):
-        self.__name = name
-        self.__players = []
-        self.__news = []
-        self.__coach = coach
-
-    def add_tournament_squad(self, tournament_squad):
-        None
-
-    def add_player(self, player):
-        None
-
-    def add_news(self, news):
-        None
-
-
-class TournamentSquad:
-    def __init__(self):
-        self.__players = []
-        self.__tournament_stats = []
-
-    def add_player(self, player):
-        None
-
-
-class Playing11:
-    def __init__(self):
-        self.__players = []
-        self.__twelfth_man = None
-
-    def add_player(self, player):
-        None
-
-```
-
-**Over, Ball, Wicket, Commentary, Inning, and Match:** Match will be an abstract class, extended by ODI, Test, and T20:
-
-```python
-from datetime import datetime
-from abc import ABC
-from .constants import MatchResult
-
-
-class Over:
-    def __init__(self, number):
-        self.__number = number
-        self.__balls = []
-
-    def add_ball(self, ball):
-        None
-
-
-class Ball:
-    def __init__(self, balled_by, played_by, ball_type, wicket, runs, commentary):
-        self.__balled_by = balled_by
-        self.__played_by = played_by
-        self.__type = ball_type
-
-        self.__wicket = wicket
-        self.__runs = runs
-        self.__commentary = commentary
-
-
-class Wicket:
-    def __init__(self, wicket_type, player_out, caught_by, runout_by, stumped_by):
-        self.__wicket_type = wicket_type
-        self.__player_out = player_out
-        self.__caught_by = caught_by
-        self.__runout_by = runout_by
-        self.__stumped_by = stumped_by
-
-
-class Commentary:
-    def __init__(self, text, commentator):
-        self.__text = text
-        self.__created_at = datetime.date.today()
-        self.__created_by = commentator
-
-
-class Inning:
-    def __init__(self, number, start_time):
-        self.__number = number
-        self.__start_time = start_time
-        self.__overs = []
-
-    def add_over(self, over):
-        None
-
-
-# from abc import ABC, abstractmethod
-class Match(ABC):
-    def __init__(self, number, start_time, referee):
-        self.__number = number
-        self.__start_time = start_time
-        self.__result = MatchResult.LIVE
-
-        self.__teams = []
-        self.__innings = []
-        self.__umpires = []
-        self.__referee = referee
-        self.__commentators = []
-        self.__match_stats = []
-
-    def assign_stadium(self, stadium):
-        None
-
-    def assign_referee(self, referee):
-        None
-
-
-class ODI(Match):
-    # ...
-    pass
-
-
-class Test(Match):
-    # ...
-    pass
-
-```
+// Enums representing various states and types in the cricket management system
+
+public enum MatchFormat {
+    ODI, T20, TEST
+}
+
+public enum MatchResult {
+    LIVE, FINISHED, DRAWN, CANCELED
+}
+
+public enum UmpireType {
+    FIELD, RESERVED, TV
+}
+
+public enum WicketType {
+    BOLD, CAUGHT, STUMPED, RUN_OUT, LBW, RETIRED_HURT, HIT_WICKET, OBSTRUCTING
+}
+
+public enum BallType {
+    NORMAL, WIDE, WICKET, NO_BALL
+}
+
+public enum RunType {
+    NORMAL, FOUR, SIX, LEG_BYE, BYE, NO_BALL, OVERTHROW
+}
+
+// Supporting Address class
+public class Address {
+    private String streetAddress;
+    private String city;
+    private String state;
+    private String zipCode;
+    private String country;
+
+    // Constructor, Getters, and Setters are omitted for brevity
+}
+
+// Abstract Person class
+public abstract class Person {
+    private String name;
+    private Address address;
+    private String email;
+    private String phone;
+
+    // Constructor, Getters, and Setters are omitted for brevity
+}
+
+// Player class representing a cricket player
+public class Player extends Person {
+    private List<PlayerContract> contracts = new ArrayList<>();
+
+    public boolean addContract(PlayerContract contract) {
+        contracts.add(contract);
+        return true;
+    }
+}
+
+// Admin class handling administrative tasks
+public class Admin extends Person {
+    public boolean addMatch(Match match) {
+        System.out.println("Match added: " + match);
+        return true;
+    }
+
+    public boolean addTeam(Team team) {
+        System.out.println("Team added: " + team.getName());
+        return true;
+    }
+
+    public boolean addTournament(Tournament tournament) {
+        System.out.println("Tournament added: " + tournament.getName());
+        return true;
+    }
+}
+
+// Umpire class managing umpiring tasks
+public class Umpire extends Person {
+    public boolean assignMatch(Match match) {
+        System.out.println("Umpire assigned to match: " + match.getMatchNumber());
+        return true;
+    }
+}
+
+// Referee class handling refereeing tasks
+public class Referee extends Person {
+    public boolean assignMatch(Match match) {
+        System.out.println("Referee assigned to match: " + match.getMatchNumber());
+        return true;
+    }
+}
+
+// Commentator class handling match commentary, with Observer pattern
+public class Commentator extends Person implements Observer {
+    private List<Match> assignedMatches = new ArrayList<>();
+
+    public boolean assignMatch(Match match) {
+        assignedMatches.add(match);
+        match.addObserver(this);
+        System.out.println("Commentator assigned to match: " + match.getMatchNumber());
+        return true;
+    }
+
+    @Override
+    public void update(String commentaryText) {
+        System.out.println("Commentator received update: " + commentaryText);
+    }
+}
+
+// Observer interface for notifying Commentators about match updates
+interface Observer {
+    void update(String message);
+}
+
+// Observable Match class implementing match updates and observer management
+public abstract class Match {
+    private int number;
+    private Date startTime;
+    private MatchResult result;
+    private List<Observer> observers = new ArrayList<>();
+
+    private Playing11[] teams = new Playing11[2];
+    private List<Inning> innings = new ArrayList<>();
+    private List<Umpire> umpires = new ArrayList<>();
+    private Referee referee;
+    private List<Commentator> commentators = new ArrayList<>();
+    private Stadium stadium;
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+
+    public void assignStadium(Stadium stadium) {
+        this.stadium = stadium;
+    }
+
+    public void assignReferee(Referee referee) {
+        this.referee = referee;
+    }
+
+    public int getMatchNumber() {
+        return number;
+    }
+
+    public void addCommentary(String commentaryText) {
+        notifyObservers(commentaryText);
+    }
+
+    // Other match-specific methods omitted for brevity
+}
+
+// Specific match types using the Factory Pattern
+public class ODI extends Match {
+    // ODI-specific methods
+}
+
+public class Test extends Match {
+    // Test-specific methods
+}
+
+public class T20 extends Match {
+    // T20-specific methods
+}
+
+// Factory to create different match formats
+public class MatchFactory {
+    public static Match createMatch(MatchFormat format) {
+        switch (format) {
+            case ODI:
+                return new ODI();
+            case T20:
+                return new T20();
+            case TEST:
+                return new Test();
+            default:
+                throw new IllegalArgumentException("Unknown format");
+        }
+    }
+}
+
+// Team class representing a cricket team
+public class Team {
+    private String name;
+    private List<Player> players = new ArrayList<>();
+    private Coach coach;
+
+    public boolean addPlayer(Player player) {
+        players.add(player);
+        return true;
+    }
+
+    public boolean addNews(News news) {
+        System.out.println("News added to team: " + name);
+        return true;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+// Tournament-related classes
+public class Tournament {
+    private String name;
+    private List<Team> teams = new ArrayList<>();
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class TournamentSquad {
+    private List<Player> players = new ArrayList<>();
+
+    public boolean addPlayer(Player player) {
+        players.add(player);
+        return true;
+    }
+}
+
+// Playing11 class representing the final playing squad for a match
+public class Playing11 {
+    private List<Player> players = new ArrayList<>();
+    private Player twelfthMan;
+
+    public boolean addPlayer(Player player) {
+        players.add(player);
+        return true;
+    }
+}
+
+// Ball-by-ball representation
+public class Ball {
+    private Player bowledBy;
+    private Player playedBy;
+    private BallType type;
+    private Wicket wicket;
+    private List<Run> runs = new ArrayList<>();
+    private Commentary commentary;
+
+    public void addRun(Run run) {
+        runs.add(run);
+    }
+
+    public void addWicket(Wicket wicket) {
+        this.wicket = wicket;
+    }
+}
+
+// Over class representing an over in the match
+public class Over {
+    private int number;
+    private List<Ball> balls = new ArrayList<>();
+
+    public void addBall(Ball ball) {
+        balls.add(ball);
+    }
+}
+
+// Inning class representing an inning in the match
+public class Inning {
+    private int number;
+    private Date startTime;
+    private List<Over> overs = new ArrayList<>();
+
+    public boolean addOver(Over over) {
+        overs.add(over);
+        return true;
+    }
+}
+
+// Wicket class representing a wicket event
+public class Wicket {
+    private WicketType type;
+    private Player playerOut;
+    private Player caughtBy;
+    private Player runoutBy;
+    private Player stumpedBy;
+}
+
+// Commentary class for ball-by-ball commentary
+public class Commentary {
+    private String text;
+    private Date createdAt;
+    private Commentator createdBy;
+
+    public Commentary(String text, Commentator createdBy) {
+        this.text = text;
+        this.createdBy = createdBy;
+        this.createdAt = new Date();
+    }
+}
+
+// Stadium class for the match location
+public class Stadium {
+    private String name;
+    private Address location;
+
+    public String getName() {
+        return name;
+    }
+}
+
+// Run class representing runs scored in a ball
+public class Run {
+    private RunType type;
+    private int value;
+
+    public Run(RunType type, int value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+}
+
+// Main class to demonstrate the use of the system
+public class Main {
+    public static void main(String[] args) {
+        Admin admin = new Admin();
+        Match match = MatchFactory.createMatch(MatchFormat.T20);
+        admin.addMatch(match);
+
+        Commentator commentator = new Commentator();
+        commentator.assignMatch(match);
+
+        match.addCommentary("Batsman hits a four!");
+    }
+}

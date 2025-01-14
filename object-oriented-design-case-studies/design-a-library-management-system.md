@@ -3,11 +3,11 @@
 
 **We'll cover the following:**
 
-* [System Requirements](#system-requirements)
-* [Use Case Diagram](#use-case-diagram)
-* [Class Diagram](#class-diagram)
-* [Activity Diagrams](#activity-diagrams)
-* [Code](#code)
+- [System Requirements](#system-requirements)
+- [Use Case Diagram](#use-case-diagram)
+- [Class Diagram](#class-diagram)
+- [Activity Diagrams](#activity-diagrams)
+- [Code](#code)
 
 A Library Management System is a software built to handle the primary housekeeping functions of a library. Libraries rely on library management systems to manage asset collections as well as relationships with their members. Library management systems help libraries keep track of the books and their checkouts, as well as members’ subscriptions and profiles.
 
@@ -46,19 +46,19 @@ We will focus on the following set of requirements while designing the Library M
 
 We have three main actors in our system:
 
-* **Librarian:** Mainly responsible for adding and modifying books, book items, and users. The Librarian can also issue, reserve, and return book items.
-* **Member:** All members can search the catalog, as well as check-out, reserve, renew, and return a book.
-* **System:** Mainly responsible for sending notifications for overdue books, canceled reservations, etc.
+- **Librarian:** Mainly responsible for adding and modifying books, book items, and users. The Librarian can also issue, reserve, and return book items.
+- **Member:** All members can search the catalog, as well as check-out, reserve, renew, and return a book.
+- **System:** Mainly responsible for sending notifications for overdue books, canceled reservations, etc.
 
 Here are the top use cases of the Library Management System:
 
-* **Add/Remove/Edit book:** To add, remove or modify a book or book item.
-* **Search catalog:** To search books by title, author, subject or publication date.
-* **Register new account/cancel membership:** To add a new member or cancel the membership of an existing member.
-* **Check-out book:** To borrow a book from the library.
-* **Reserve book:** To reserve a book which is not currently available.
-* **Renew a book:** To reborrow an already checked-out book.
-* **Return a book:** To return a book to the library which was issued to a member.
+- **Add/Remove/Edit book:** To add, remove or modify a book or book item.
+- **Search catalog:** To search books by title, author, subject or publication date.
+- **Register new account/cancel membership:** To add a new member or cancel the membership of an existing member.
+- **Check-out book:** To borrow a book from the library.
+- **Reserve book:** To reserve a book which is not currently available.
+- **Renew a book:** To reborrow an already checked-out book.
+- **Return a book:** To return a book to the library which was issued to a member.
 
 Here is the use case diagram of our Library Management System:
 
@@ -72,21 +72,21 @@ Here is the use case diagram of our Library Management System:
 
 Here are the main classes of our Library Management System:
 
-* **Library:** The central part of the organization for which this software has been designed. It has attributes like ‘Name’ to distinguish it from any other libraries and ‘Address’ to describe its location.
-* **Book:** The basic building block of the system. Every book will have ISBN, Title, Subject, Publishers, etc.
-* **BookItem:** Any book can have multiple copies, each copy will be considered a book item in our system. Each book item will have a unique barcode.
-* **Account:** We will have two types of accounts in the system, one will be a general member, and the other will be a librarian.
-* **LibraryCard:** Each library user will be issued a library card, which will be used to identify users while issuing or returning books.
-* **BookReservation:** Responsible for managing reservations against book items.
-* **BookLending:** Manage the checking-out of book items.
-* **Catalog:** Catalogs contain list of books sorted on certain criteria. Our system will support searching through four catalogs: Title, Author, Subject, and Publish-date.
-* **Fine:** This class will be responsible for calculating and collecting fines from library members.
-* **Author:** This class will encapsulate a book author.
-* **Rack:** Books will be placed on racks. Each rack will be identified by a rack number and will have a location identifier to describe the physical location of the rack in the library.
-* **Notification:** This class will take care of sending notifications to library members.
+- **Library:** The central part of the organization for which this software has been designed. It has attributes like ‘Name’ to distinguish it from any other libraries and ‘Address’ to describe its location.
+- **Book:** The basic building block of the system. Every book will have ISBN, Title, Subject, Publishers, etc.
+- **BookItem:** Any book can have multiple copies, each copy will be considered a book item in our system. Each book item will have a unique barcode.
+- **Account:** We will have two types of accounts in the system, one will be a general member, and the other will be a librarian.
+- **LibraryCard:** Each library user will be issued a library card, which will be used to identify users while issuing or returning books.
+- **BookReservation:** Responsible for managing reservations against book items.
+- **BookLending:** Manage the checking-out of book items.
+- **Catalog:** Catalogs contain list of books sorted on certain criteria. Our system will support searching through four catalogs: Title, Author, Subject, and Publish-date.
+- **Fine:** This class will be responsible for calculating and collecting fines from library members.
+- **Author:** This class will encapsulate a book author.
+- **Rack:** Books will be placed on racks. Each rack will be identified by a rack number and will have a location identifier to describe the physical location of the rack in the library.
+- **Notification:** This class will take care of sending notifications to library members.
 
 <p align="center">
-    <img src="/media-files/lib-class-diagram.png" alt="Library Class Diagram">
+    <img src="/media-files/image.png" alt="Library Class Diagram">
     <br />
     Class Diagram for Library Management System
 </p>
@@ -132,6 +132,7 @@ Note: This code only focuses on the design part of the use cases. Since you are 
 **Enums and Constants:** Here are the required enums, data types, and constants:
 
 **Code Snippet:**
+
 ```python
 from abc import ABC
 from enum import Enum
@@ -181,6 +182,7 @@ class Constants:
 **Account, Member, and Librarian:** These classes represent various people that interact with our system:
 
 **Code Snippet:**
+
 ```python
 # For simplicity, we are not defining getter and setter functions. The reader can
 # assume that all class attributes are private and accessed through their respective
@@ -300,131 +302,274 @@ class Member(Account):
 **BookReservation, BookLending, and Fine:** These classes represent a book reservation, lending, and fine collection, respectively.
 
 **Code Snippet:**
-```python
-class BookReservation:
-    def __init__(self, creation_date, status, book_item_barcode, member_id):
-        self.__creation_date = creation_date
-        self.__status = status
-        self.__book_item_barcode = book_item_barcode
-        self.__member_id = member_id
 
-    def fetch_reservation_details(self, barcode):
-        None
+This is my first take on the famous "Design a Library Management System". Feel free to provide feedback on what's wrong / how this can be improved.
 
 
-class BookLending:
-    def __init__(self, creation_date, due_date, book_item_barcode, member_id):
-        self.__creation_date = creation_date
-        self.__due_date = due_date
-        self.__return_date = None
-        self.__book_item_barcode = book_item_barcode
-        self.__member_id = member_id
-
-    def lend_book(self, barcode, member_id):
-        None
-
-    def fetch_lending_details(self, barcode):
-        None
+Requirements
+Books have the following information:
 
 
-class Fine:
-    def __init__(self, creation_date, book_item_barcode, member_id):
-        self.__creation_date = creation_date
-        self.__book_item_barcode = book_item_barcode
-        self.__member_id = member_id
-
-    def collect_fine(self, member_id, days):
-        None
+Unique id
+Title
+Author
+Publication Date
+There can be multiple copies of the same book (book items). Each book item has a unique barcode.
 
 
-```
-
-**BookItem:** Encapsulating a book item, this class will be responsible for processing the reservation, return, and renewal of a book item.
-
-**Code Snippet:**
-```python
-from abc import ABC
-from .constants import *
+There can be 2 types of users:
 
 
-class Book(ABC):
-    def __init__(self, ISBN, title, subject, publisher, language, number_of_pages):
-        self.__ISBN = ISBN
-        self.__title = title
-        self.__subject = subject
-        self.__publisher = publisher
-        self.__language = language
-        self.__number_of_pages = number_of_pages
-        self.__authors = []
+Librarians - Can add and remove books, book items and users, search the catalog (by title, author or publication date). Can also checkout, renew and return books.
+General members - can search the catalog (by title, author or publication date), as well as check-out, renew, and return a book.
+Each user has a unique barcode and a name.
 
 
-class BookItem(Book):
-    def __init__(self, barcode, is_reference_only, borrowed, due_date, price, book_format, status,
-                 date_of_purchase, publication_date, placed_at):
-        self.__barcode = barcode
-        self.__is_reference_only = is_reference_only
-        self.__borrowed = borrowed
-        self.__due_date = due_date
-        self.__price = price
-        self.__format = book_format
-        self.__status = status
-        self.__date_of_purchase = date_of_purchase
-        self.__publication_date = publication_date
-        self.__placed_at = placed_at
-
-    def checkout(self, member_id):
-        if self.get_is_reference_only():
-            print("self book is Reference only and can't be issued")
-            return False
-        if not BookLending.lend_book(self.get_bar_code(), member_id):
-            return False
-        self.update_book_item_status(BookStatus.LOANED)
-        return True
+Also, we have the following limitations:
 
 
-class Rack:
-    def __init__(self, number, location_identifier):
-        self.__number = number
-        self.__location_identifier = location_identifier
+A member can checkout at most 3 books
+A member can keep a book at most 20 days.
+The system should be able to calculate the fine for the users who return the books after the expected deadline.
+My Solution:
+We have the following classes/interfaces:
 
 
-```
-
-**Search interface and Catalog:** The Catalog class will implement the Search interface to facilitate searching of books.
-
-**Code Snippet:**
-```python
-from abc import ABC
+A BookDetails class representing the details for a given book (id, title, author, etc). This is NOT a book item, just a class describing book details. Notice that it is immutable (once created, cannot be modified) so it can be used as a key for Maps:
 
 
-class Search(ABC):
-    def search_by_title(self, title):
-        None
+public class BookDetails {
+	private String id;
+	private String authorName;
+	private LocalDateTime publicationDate;
 
-    def search_by_author(self, author):
-        None
+	public BookDetails(String id, String authorName, LocalDateTime publicationDate) {
+		this.id = id;
+		this.authorName = authorName;
+		this.publicationDate = publicationDate;
+	}
 
-    def search_by_subject(self, subject):
-        None
+	public String getId() {
+		return id;
+	}
 
-    def search_by_pub_date(self, publish_date):
-        None
+	public String getAuthorName() {
+		return authorName;
+	}
 
+	public LocalDateTime getPublicationDate() {
+		return publicationDate;
+	}
 
-class Catalog(Search):
-    def __init__(self):
-        self.__book_titles = {}
-        self.__book_authors = {}
-        self.__book_subjects = {}
-        self.__book_publication_dates = {}
-
-    def search_by_title(self, query):
-        # return all books containing the string query in their title.
-        return self.__book_titles.get(query)
-
-    def search_by_author(self, query):
-        # return all books containing the string query in their author's name.
-        return self.__book_authors.get(query)
+}
+A BookItem class representing a single instance of a given book. We use aggregation here to get the book details. In addition to the book details, we are also adding a barcode property that is unique to each BookItem:
 
 
-```
+public class BookItem {
+	public BookItem(String bookItemId, BookDetails bookDetails) {
+		this.bookItemId = bookItemId;
+		this.bookDetails = bookDetails;
+	}
+
+	private String bookItemId;
+
+	private BookDetails bookDetails;
+
+	public String getBookItemId() {
+		return bookItemId;
+	}
+
+	public BookDetails getBookDetails() {
+		return bookDetails;
+	}
+}
+A UserType enum representing user types.
+
+
+public enum UserType {
+	LIBRARIAN, MEMBER
+}
+A User class representing the library users. Some solutions suggest creating multiple classes for different types of users (not sure what we are achieving by doing that):
+
+
+public class User {
+	public User(String barcode, String name, UserType userType) {
+		this.barcode = barcode;
+		this.name = name;
+		this.userType = userType;
+	}
+
+	private String barcode;
+	private String name;
+	private UserType userType;
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public String getName() {
+		return name;
+	}
+}
+Now, let's look at the main class - the Library class that exposes all the necessary actions:
+
+
+public class Library {
+
+	private User currentUser;
+	private UserRepository userRepository;
+	private BookCatalog bookCatalog;
+	private LendingService lendingService;
+
+	private void ensureLoggedInUser() {
+		Objects.requireNonNull(this.currentUser, "There should be a logged in user");
+	}
+
+	private void ensureLibrarianAccess() throws RestrictedAccessException {
+		ensureLoggedInUser();
+		if (currentUser.getUserType() != UserType.LIBRARIAN) {
+			throw new RestrictedAccessException();
+		}
+	}
+
+	public void loginUser(String barcode) {
+		User user = userRepository.getUserByBarCode(barcode);
+
+		Objects.requireNonNull(user, "Wrong barcode");
+
+		this.currentUser = user;
+	}
+
+	public void createUser(User newUser) throws RestrictedAccessException {
+		ensureLibrarianAccess();
+
+		userRepository.addUser(newUser);
+	}
+
+	public void removeUser(String barcode) throws RestrictedAccessException {
+		ensureLibrarianAccess();
+
+		User user = userRepository.getUserByBarCode(barcode);
+
+		Objects.requireNonNull(user, "No user found");
+
+		userRepository.removeUser(barcode);
+	}
+
+	public void addBookItem(BookItem bookItem) throws RestrictedAccessException {
+		ensureLibrarianAccess();
+
+		bookCatalog.addBookItem(bookItem);
+	}
+
+	public void removeBookItem(String bookItemID) throws RestrictedAccessException  {
+		ensureLibrarianAccess();
+
+		bookCatalog.removeBookItem(bookItemID);
+	}
+
+	public List<BookDetails> searchByTitle(String title) {
+		ensureLoggedInUser();
+
+		return bookCatalog.searchByTitle(title);
+	}
+
+	public List<BookDetails> searchByAuthor(String name) {
+		ensureLoggedInUser();
+
+		return bookCatalog.searchByAuthor(name);
+	}
+
+	public List<BookDetails> searchByPublicationDate(LocalDateTime publicationDate) {
+		ensureLoggedInUser();
+
+		return bookCatalog.searchByPublicationDate(publicationDate);
+	}
+
+	public List<BookItem> getCheckoutBooks() {
+		ensureLoggedInUser();
+
+		return lendingService.getCheckedOutBooks(currentUser);
+	}
+
+	public List<User> getLendingUsers(String bookID) throws RestrictedAccessException {
+		ensureLibrarianAccess();
+
+		return lendingService.getLendingUsers(bookID);
+	}
+
+	public int getOverdueFines() {
+		ensureLoggedInUser();
+		return lendingService.getOverdueFineAmount(currentUser);
+	}
+
+	public BookItem checkout(String bookID) {
+		ensureLoggedInUser();
+
+		return lendingService.checkout(currentUser, bookID);
+	}
+
+	public boolean renew(BookItem item) {
+		ensureLoggedInUser();
+
+		return lendingService.renew(currentUser, item);
+	}
+
+	public boolean returnBookItem(BookItem item) {
+		ensureLoggedInUser();
+
+		return lendingService.returnBook(currentUser, item);
+	}
+
+	public Library(
+		UserRepository userRepository,
+		BookCatalog bookCatalog,
+		LendingService lendingService
+	) {
+		this.userRepository = userRepository;
+		this.bookCatalog = bookCatalog;
+		this.lendingService = lendingService;
+	}
+}
+A couple of important notes about this class:
+
+
+Throught constructor injection we get a UserRepository (a repository handling user persistence), a BookCatalog (allowing us to search/add/remove books and book items) and a LendingService (responsible for actions like checkout, renew, return and find calculation). UserRepository , BookCatalog and LendingService are all interfaces exposing appropriate actions (they will be discussed later). This makes unit testing easier and results in a loosely coupled code. The Library class uses these services to perform all the necessary actions. This seems to be a neat way to organize the responsibilities (if you feel that this can be further improved, please, let me know).
+Since we have to make access checks, we have to introduce the notion of the currently logged in user (it is saved in the currentUser field). Also, we have a couple of access check related methods (ensureLoggedInUser, ensureLibrarianAccess) that are throwing exceptions if certain invariants are violated. As a potential improvement, we could create an AccessCheckService that does this.
+The rest of the code is fairly simple. For each action, we ensure that the current user can perform it (otherwise, an exception is thrown) and then the action is performed through the services.
+Now, let's look at the service interfaces:
+
+
+Fairly simple user persistence abstraction. I haven't provided a concrete implementation, can be done by having a Map from barcode to user instance:
+
+
+public interface UserRepository {
+	User getUserByBarCode(String barCode);
+	void addUser(User user);
+	void removeUser(String barCode);
+}
+The BookCatalog interface - represents a book catalog. For brevity, I have not have provided an implementation for this either but its easy to code a Map based implementation:
+
+
+public interface BookCatalog {
+	void addBookItem(BookItem bookItem);
+	void removeBookItem(String bookItemID);
+	List<BookDetails> searchByTitle(String title);
+	List<BookDetails> searchByAuthor(String name);
+	List<BookDetails> searchByPublicationDate(LocalDateTime publicationDate);
+}
+A LendingService interface - performs the lending related tasks:
+
+
+public interface LendingService {
+	List<BookItem> getCheckedOutBooks(User user);
+	List<User> getLendingUsers(String bookID);
+	int getOverdueFineAmount(User user);
+	BookItem checkout(User user, String bookID);
+	boolean renew(User user, BookItem bookItem);
+	boolean returnBook(User user, BookItem bookItem);
+}

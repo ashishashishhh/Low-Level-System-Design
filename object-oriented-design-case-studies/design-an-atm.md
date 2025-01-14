@@ -164,248 +164,165 @@ Here is the skeleton code for the classes defined above:
 
 **Enums and Constants:** Here are the required enums, data types, and constants:
 
-```python
-from enum import Enum
-
-
-class TransactionType(Enum):
-    BALANCE_INQUIRY, DEPOSIT_CASH, DEPOSIT_CHECK, WITHDRAW, TRANSFER = 1, 2, 3, 4, 5
-
-
-class TransactionStatus(Enum):
-    SUCCESS, FAILURE, BLOCKED, FULL, PARTIAL, NONE = 1, 2, 3, 4, 5, 6
-
-
-class CustomerStatus(Enum):
-    ACTIVE, BLOCKED, BANNED, COMPROMISED, ARCHIVED, CLOSED, UNKNOWN = 1, 2, 3, 4, 5, 6, 7
-
-
-class Address:
-    def __init__(self, street, city, state, zip_code, country):
-        self.__street_address = street
-        self.__city = city
-        self.__state = state
-        self.__zip_code = zip_code
-        self.__country = country
-
-
-```
-
-**Customer, Card, and Account:** “Customer” encapsulates the ATM user, “Card” the ATM card, and “Account” can be of two types: checking and savings:
-
-```python
-# For simplicity, we are not defining getter and setter functions. The reader can
-# assume that all class attributes are private and accessed through their respective
-# public getter methods and modified only through their public methods function.
-
-
-class Customer:
-    def __init__(self, name, address, email, phone, status):
-        self.__name = name
-        self.__address = address
-        self.__email = email
-        self.__phone = phone
-        self.__status = status
-        self.__card = Card()
-        self.__account = Account
-    
-    def make_transaction(self, transaction):
-        None
-    
-    def get_billing_address(self):
-        None
-
-
-class Card:
-    def __init__(self, number, customer_name, expiry, pin):
-        self.__card_number = number
-        self.__customer_name = customer_name
-        self.__card_expiry = expiry
-        self.__pin = pin
-    
-    def get_billing_address(self):
-        None
-
-
-class Account:
-    def __init__(self, account_number):
-        self.__account_number = account_number
-        self.__total_balance = 0.0
-        self.__available_balance = 0.0
-    
-    def get_available_balance(self):
-        return self.__available_balance
-
-
-class SavingAccount(Account):
-    def __init__(self, withdraw_limit):
-        self.__withdraw_limit = withdraw_limit
-
-
-class CheckingAccount(Account):
-    def __init__(self, debit_card_number):
-        self.__debit_card_number = debit_card_number
-
-
-```
-
-**Bank, ATM, CashDispenser, Keypad, Screen, Printer and DepositSlot:** The ATM will have different components like keypad, screen, etc.
-
-```python
-from abc import ABC
-
-
-class Bank:
-  def __init__(self, name, bank_code):
-    self.__name = name
-    self.__bank_code = bank_code
-
-  def get_bank_code(self):
-    return self.__bank_code
-
-  def add_atm(self, atm):
-    None
-
-
-class ATM:
-  def __init__(self, id, location):
-    self.__atm_id = id
-    self.__location = location
-
-    self.__cash_dispenser = CashDispenser()
-    self.__keypad = Keypad()
-    self.__screen = Screen()
-    self.__printer = Printer()
-    self.__check_deposit = CheckDeposit()
-    self.__cash_deposit = CashDeposit
-
-  def authenticate_user(self):
-    None
-
-  def make_transaction(self, customer, transaction):
-    None
-
-
-class CashDispenser:
-  def __init__(self):
-    self.__total_five_dollar_bills = 0
-    self.__total_twenty_dollar_bills = 0
-
-  def dispense_cash(self, amount):
-    None
-
-  def can_dispense_cash(self):
-    None
-
-
-class Keypad:
-  def get_input(self):
-    None
-
-
-class Screen:
-  def show_message(self, message):
-    None
-
-  def get_input(self):
-    None
-
-
-class Printer:
-  def print_receipt(self, transaction):
-    None
-
-
-class CheckDeposit:
-    def __init__(self):
-        None
-
-
-class CashDeposit:
-    def __init__(self):
-        None
-
-
-class DepositSlot(ABC):
-  def __init__(self):
-    self.__total_amount = 0.0
-
-  def get_total_amount(self):
-    return self.__total_amount
-
-
-class CheckDepositSlot(DepositSlot):
-  def get_check_amount(self):
-    None
-
-
-class CashDepositSlot(DepositSlot):
-  def receive_dollar_bill(self):
-    None
-
-
-```
-
-**Transaction and its subclasses:** Customers can perform different transactions on the ATM, these classes encapsulate them:
-
-```python
-from abc import ABC
-
-
-class Transaction(ABC):
-    def __init__(self, id, creation_date, status):
-        self.__transaction_id = id
-        self.__creation_time = creation_date
-        self.__status = status
-
-    def make_transation(self):
-        None
-
-
-class BalanceInquiry(Transaction):
-    def __init__(self, account_id):
-        self.__account_id = account_id
-
-    def get_account_id(self):
-        return self.__account_id
-
-
-class Deposit(Transaction):
-    def __init__(self, amount):
-        self.__amount = amount
-
-    def get_amount(self):
-        return self.__amount
-
-
-class CheckDeposit(Deposit):
-    def __init__(self, check_number, bank_code):
-        self.__check_number = check_number
-        self.__bank_code = bank_code
-
-    def get_check_number(self):
-        return self.__check_number
-
-
-class CashDeposit(Deposit):
-    def __init__(self, cash_deposit_limit):
-        self.__cash_deposit_limit = cash_deposit_limit
-
-
-class Withdraw(Transaction):
-    def __init__(self, amount):
-        self.__amount = amount
-
-    def get_amount(self):
-        return self.__amount
-
-
-class Transfer(Transaction):
-    def __init__(self, destination_account_number):
-        self.__destination_account_number = destination_account_number
-
-    def get_destination_account(self):
-        return self.__destination_account_number
-
-```
-
+import java.util.Scanner;
+
+// Context class representing the ATM
+class ATM {
+    private ATMState currentState;
+    private int balance;
+
+    public ATM(int initialBalance) {
+        currentState = new IdleState(this);
+        balance = initialBalance;
+    }
+
+    public void setCurrentState(ATMState state) {
+        currentState = state;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public void insertCard() {
+        currentState.insertCard();
+    }
+
+    public void ejectCard() {
+        currentState.ejectCard();
+    }
+
+    public void enterPIN() {
+        currentState.enterPIN();
+    }
+
+    public void withdraw(int amount) {
+        currentState.withdraw(amount);
+    }
+}
+
+// State interface
+interface ATMState {
+    void insertCard();
+
+    void ejectCard();
+
+    void enterPIN();
+
+    void withdraw(int amount);
+}
+
+// Concrete state representing the idle state
+class IdleState implements ATMState {
+    private ATM atm;
+
+    public IdleState(ATM atm) {
+        this.atm = atm;
+    }
+
+    @Override
+    public void insertCard() {
+        System.out.println("Card inserted");
+        atm.setCurrentState(new CardInsertedState(atm));
+    }
+
+    @Override
+    public void ejectCard() {
+        System.out.println("No card to eject");
+    }
+
+    @Override
+    public void enterPIN() {
+        System.out.println("Please insert a card first");
+    }
+
+    @Override
+    public void withdraw(int amount) {
+        System.out.println("Please insert a card and enter PIN first");
+    }
+}
+
+// Concrete state representing the card inserted state
+class CardInsertedState implements ATMState {
+    private ATM atm;
+
+    public CardInsertedState(ATM atm) {
+        this.atm = atm;
+    }
+
+    @Override
+    public void insertCard() {
+        System.out.println("Card is already inserted");
+    }
+
+    @Override
+    public void ejectCard() {
+        System.out.println("Card ejected");
+        atm.setCurrentState(new IdleState(atm));
+    }
+
+    @Override
+    public void enterPIN() {
+        System.out.println("PIN entered");
+        atm.setCurrentState(new PINEnteredState(atm));
+    }
+
+    @Override
+    public void withdraw(int amount) {
+        System.out.println("Please enter PIN first");
+    }
+}
+
+// Concrete state representing the PIN entered state
+class PINEnteredState implements ATMState {
+    private ATM atm;
+
+    public PINEnteredState(ATM atm) {
+        this.atm = atm;
+    }
+
+    @Override
+    public void insertCard() {
+        System.out.println("Card is already inserted");
+    }
+
+    @Override
+    public void ejectCard() {
+        System.out.println("Card ejected");
+        atm.setCurrentState(new IdleState(atm));
+    }
+
+    @Override
+    public void enterPIN() {
+        System.out.println("PIN is already entered");
+    }
+
+    @Override
+    public void withdraw(int amount) {
+        if (amount > atm.getBalance()) {
+            System.out.println("Insufficient funds");
+        } else {
+            atm.setBalance(atm.getBalance() - amount);
+            System.out.println("Withdrawal successful. Remaining balance: " + atm.getBalance());
+            atm.setCurrentState(new IdleState(atm));
+        }
+    }
+}
+
+// Main class to run the ATM
+public class Main {
+    public static void main(String[] args) {
+        // Initialize the ATM with an initial balance
+        ATM atm = new ATM(1000);
+
+        // Simulate ATM interactions
+        atm.insertCard();
+        atm.enterPIN();
+        atm.withdraw(500);
+        atm.ejectCard();
+    }
+}
